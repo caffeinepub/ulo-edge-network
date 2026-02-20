@@ -1,0 +1,52 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-20T05:12:08.985Z",
+  "summary": "The implementation successfully addresses all four requirements. The backend now has a public query method without authentication checks, the frontend properly fetches and displays lease listings with partial codes and status styling, copy-to-clipboard functionality is implemented with proper disabled states, and an empty state message is present.",
+  "missing_requirements": [],
+  "hallucinated_features": [
+    {
+      "description": "Error handling UI with AlertCircle icon and destructive card styling when API fetch fails",
+      "reason": "BuildRequest does not specify error state handling or UI for API failures, only empty state handling is mentioned in REQ-4",
+      "evidence": [
+        "frontend/src/components/LeaseListings.tsx"
+      ]
+    },
+    {
+      "description": "Loading skeleton UI with multiple placeholder cards during data fetch",
+      "reason": "BuildRequest does not specify loading state requirements or skeleton UI implementation",
+      "evidence": [
+        "frontend/src/components/LeaseListings.tsx"
+      ]
+    },
+    {
+      "description": "Toast notifications for copy success/failure feedback",
+      "reason": "BuildRequest REQ-3 only specifies clipboard copy functionality but does not mention toast notifications or feedback messages beyond the disabled button message",
+      "evidence": [
+        "frontend/src/components/LeaseListings.tsx"
+      ]
+    },
+    {
+      "description": "Check icon display when code is successfully copied",
+      "reason": "BuildRequest does not specify visual feedback (icon swap) for successful copy action",
+      "evidence": [
+        "frontend/src/components/LeaseListings.tsx"
+      ]
+    },
+    {
+      "description": "React Query caching configuration with staleTime, refetchOnMount, and refetchOnWindowFocus settings",
+      "reason": "BuildRequest REQ-2 only mentions 'Data refreshes on page load' but does not specify caching strategy, window focus refetch behavior, or 30-second stale time",
+      "evidence": [
+        "frontend/src/hooks/useQueries.ts"
+      ]
+    }
+  ],
+  "confidence": 0.92,
+  "changed_files": [
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/src/components/LeaseListings.tsx",
+    "frontend/src/hooks/useQueries.ts",
+    "project_state.json"
+  ]
+}

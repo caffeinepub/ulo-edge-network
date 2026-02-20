@@ -1,0 +1,106 @@
+{
+  "kind": "build_request",
+  "title": "Fix public lease listings not displaying",
+  "projectName": "ULO Lease Marketplace",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Fix the public query method in backend/main.mo to ensure it returns all lease listings without requiring authentication, and verify it is properly exposed as a public query function",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "Make sure the public query/fetch function in the canister is correctly implemented and called by the frontend component. Use a public query method (no auth required) to get the list of leases."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend has a public query method that returns all lease listings",
+        "Method does not require authentication or authorization",
+        "Method can be successfully called from the frontend without Internet Identity login"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Update frontend/src/components/LeaseListings.tsx to properly fetch and display all existing lease entries from the backend, showing partial lease code (first 4 chars + '...' + first 4 chars after last hyphen, e.g., '2793...2003'), split ratio (e.g., '60/40'), and availability status with proper styling (green for Available, red/grayed for Unavailable)",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "The public lease listings section (e.g., table/cards on homepage showing available ULO leases) now properly fetches and displays ALL existing lease entries from storage. Show for each: Partial lease code (first 4 chars + '...' + first 4 chars after last hyphen, e.g., '2793...2003'), Split ratio (e.g., '60/40'), Availability status (e.g., 'Available' in green or 'Unavailable' in red/grayed)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Component fetches all lease listings using the public query method",
+        "Each listing displays partial lease code in the specified format",
+        "Each listing displays split ratio",
+        "Available status shown in green, Unavailable status shown in red/grayed",
+        "Nickname field is NOT displayed on public side",
+        "Data refreshes on page load"
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add a copy full code button for each lease listing that copies the complete UUID to clipboard when clicked, and disable/grey out this button when the lease is unavailable with a message 'This code is already in use. Please try another.'",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "Copy full code button (copies the complete UUID to clipboard when clicked)",
+          "If unavailable: disable/grey the copy button + show message like 'This code is already in use. Please try another.'"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Each lease listing has a copy button",
+        "Clicking the button copies the full lease code UUID to clipboard",
+        "When lease is unavailable, button is disabled and grayed out",
+        "Unavailable leases show message 'This code is already in use. Please try another.'",
+        "Copy functionality uses JavaScript clipboard API"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Handle empty lease listings state by displaying a friendly message like 'No leases available yet — check back soon!' when the backend returns an empty array",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "Handle cases where array is empty (show a message like 'No leases available yet — check back soon!' or similar)."
+        ]
+      },
+      "acceptanceCriteria": [
+        "When no leases exist, component displays empty state message",
+        "Message is user-friendly and informative",
+        "Empty state does not show errors or loading spinners"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify the admin dashboard functionality — it is working correctly",
+    "Do not display Nickname field on the public frontend",
+    "Preserve Internet Identity authentication locked to the admin principal",
+    "Maintain app download links for iOS/Android Unity app",
+    "Preserve embedded YouTube shorts/tutorials",
+    "Keep mobile-responsive design",
+    "Maintain partial code security pattern"
+  ],
+  "nonGoals": [
+    "Changes to admin dashboard interface or functionality",
+    "Modifications to authentication or authorization logic",
+    "Adding new fields to lease listings",
+    "Changes to admin-only features",
+    "Styling changes beyond status color coding"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

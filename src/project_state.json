@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "ULO lease code marketplace web app with admin dashboard for managing lease listings and public frontend for displaying available codes",
+  "architectural_notes": [
+    "Admin dashboard with Internet Identity auth for managing lease listings (nickname field admin-only)",
+    "Public query method (no auth) for fetching all lease entries from canister storage",
+    "Frontend displays partial lease codes (first 4 chars + '...' + first 4 after last hyphen)",
+    "Copy-to-clipboard functionality for full lease UUID codes",
+    "Visual status indicators for lease availability (green Available, red/grayed Unavailable)",
+    "Unity app download links (iOS/Android) integrated in frontend",
+    "Embedded YouTube shorts and unitynodes.io media kit images",
+    "Mobile-responsive design"
+  ],
+  "known_issues": [
+    "Public frontend not displaying any lease listings despite data existing in backend storage"
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-update-frontend-src-components-leaselistings-tsx-to-properly-fetch-and-display-all-existing-lease-entries-from-the-backend-showing-partial-lease-code-first-4-chars-first-4-chars-after-last-hyphen-e-g-2793-2003-split-ratio-e-g-60-40-and-availability-status-with-proper-styling-green-for-available-red-grayed-for-unavailable",
+      "title": "Update frontend/src/components/LeaseListings.tsx to properly fetch and display all existing lease entries from the backend, showing partial lease code (first 4 chars + '...' + first 4 chars after last hyphen, e.g., '2793...2003'), split ratio (e.g., '60/40'), and availability status with proper styling (green for Available, red/grayed for Unavailable)",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-copy-full-code-button-for-each-lease-listing-that-copies-the-complete-uuid-to-clipboard-when-clicked-and-disable-grey-out-this-button-when-the-lease-is-unavailable-with-a-message-this-code-is-already-in-use-please-try-another",
+      "title": "Add a copy full code button for each lease listing that copies the complete UUID to clipboard when clicked, and disable/grey out this button when the lease is unavailable with a message 'This code is already in use. Please try another.'",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-handle-empty-lease-listings-state-by-displaying-a-friendly-message-like-no-leases-available-yet-check-back-soon-when-the-backend-returns-an-empty-array",
+      "title": "Handle empty lease listings state by displaying a friendly message like 'No leases available yet — check back soon!' when the backend returns an empty array",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Fix the public query method in backend/main.mo to ensure it returns all lease listings without requiring authentication, and verify it is properly exposed as a public query function",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    }
+  ],
+  "projectName": "ULO",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

@@ -1,0 +1,62 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-update-frontend-src-components-leaselistings-tsx-to-properly-fetch-and-display-all-existing-lease-entries-from-the-backend-showing-partial-lease-code-first-4-chars-first-4-chars-after-last-hyphen-e-g-2793-2003-split-ratio-e-g-60-40-and-availability-status-with-proper-styling-green-for-available-red-grayed-for-unavailable",
+      "featureTitle": "Update frontend/src/components/LeaseListings.tsx to properly fetch and display all existing lease entries from the backend, showing partial lease code (first 4 chars + '...' + first 4 chars after last hyphen, e.g., '2793...2003'), split ratio (e.g., '60/40'), and availability status with proper styling (green for Available, red/grayed for Unavailable)",
+      "files": [
+        "frontend/src/components/LeaseListings.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-copy-full-code-button-for-each-lease-listing-that-copies-the-complete-uuid-to-clipboard-when-clicked-and-disable-grey-out-this-button-when-the-lease-is-unavailable-with-a-message-this-code-is-already-in-use-please-try-another",
+      "featureTitle": "Add a copy full code button for each lease listing that copies the complete UUID to clipboard when clicked, and disable/grey out this button when the lease is unavailable with a message 'This code is already in use. Please try another.'",
+      "files": [
+        "frontend/src/components/LeaseListings.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-handle-empty-lease-listings-state-by-displaying-a-friendly-message-like-no-leases-available-yet-check-back-soon-when-the-backend-returns-an-empty-array",
+      "featureTitle": "Handle empty lease listings state by displaying a friendly message like 'No leases available yet — check back soon!' when the backend returns an empty array",
+      "files": [
+        "frontend/src/components/LeaseListings.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-4"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

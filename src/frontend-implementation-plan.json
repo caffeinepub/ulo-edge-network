@@ -1,0 +1,60 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Fix public lease listings not displaying",
+  "requirements": [
+    {
+      "id": "REQ-2",
+      "summary": "Update LeaseListings component to properly fetch and display all lease entries with partial code, split ratio, and styled availability status",
+      "acceptanceCriteria": [
+        "Component fetches all lease listings using the public query method",
+        "Each listing displays partial lease code in the specified format",
+        "Each listing displays split ratio",
+        "Available status shown in green, Unavailable status shown in red/grayed",
+        "Nickname field is NOT displayed on public side",
+        "Data refreshes on page load"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/LeaseListings.tsx",
+          "operation": "modify",
+          "description": "Update the component to call getAllLeaseListings() backend method without authentication requirements. Ensure the useQuery hook fetches data on mount without requiring Internet Identity login. Update the display logic to show partial lease code in format 'first 4 chars...first 4 chars after last hyphen' (e.g., '2793...2003'), split ratio, and availability status with proper color styling (green for Available, red/grayed for Unavailable). Verify nickname field is NOT displayed in the public listing cards. Ensure proper error handling and loading states are maintained."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Add copy-to-clipboard button for each lease with disabled state and message for unavailable leases",
+      "acceptanceCriteria": [
+        "Each lease listing has a copy button",
+        "Clicking the button copies the full lease code UUID to clipboard",
+        "When lease is unavailable, button is disabled and grayed out",
+        "Unavailable leases show message 'This code is already in use. Please try another.'",
+        "Copy functionality uses JavaScript clipboard API"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/LeaseListings.tsx",
+          "operation": "modify",
+          "description": "Add a copy button to each lease listing card that copies the complete leaseCode UUID to the clipboard using navigator.clipboard.writeText(). When availability is false, disable and gray out the button, and display the message 'This code is already in use. Please try another.' beneath or near the unavailable listing. Include visual feedback (toast or temporary state change) when the code is successfully copied. Use existing shadcn/ui Button component with appropriate variant and disabled state styling."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Display friendly empty state message when no lease listings are available",
+      "acceptanceCriteria": [
+        "When no leases exist, component displays empty state message",
+        "Message is user-friendly and informative",
+        "Empty state does not show errors or loading spinners"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/LeaseListings.tsx",
+          "operation": "modify",
+          "description": "Add conditional rendering to display a friendly empty state message 'No leases available yet — check back soon!' when the getAllLeaseListings() query returns an empty array. Ensure this message is styled consistently with the rest of the component and is distinct from loading and error states. The empty state should render in place of the lease listings grid when the data array has length 0."
+        }
+      ]
+    }
+  ]
+}

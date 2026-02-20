@@ -1,0 +1,68 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-20T05:12:08.989Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 4,
+    "implemented": 3,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Fix the public query method in backend/main.mo to ensure it returns all lease listings without requiring authentication, and verify it is properly exposed as a public query function",
+        "status": "unknown",
+        "plannedFiles": [],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Update frontend/src/components/LeaseListings.tsx to properly fetch and display all existing lease entries from the backend, showing partial lease code (first 4 chars + '...' + first 4 chars after last hyphen, e.g., '2793...2003'), split ratio (e.g., '60/40'), and availability status with proper styling (green for Available, red/grayed for Unavailable)",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/LeaseListings.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/LeaseListings.tsx"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Add a copy full code button for each lease listing that copies the complete UUID to clipboard when clicked, and disable/grey out this button when the lease is unavailable with a message 'This code is already in use. Please try another.'",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/LeaseListings.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/LeaseListings.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Handle empty lease listings state by displaying a friendly message like 'No leases available yet — check back soon!' when the backend returns an empty array",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/LeaseListings.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/LeaseListings.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "backend/main.mo",
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/components/LeaseListings.tsx",
+    "frontend/src/hooks/useQueries.ts",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}
