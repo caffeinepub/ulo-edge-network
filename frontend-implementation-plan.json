@@ -1,0 +1,26 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Reduce to two tutorial videos and replace with new YouTube Shorts",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Update TutorialsSection to display exactly two embedded YouTube Shorts videos, replacing all current videos with the specified URLs and removing the third video card entirely while maintaining the existing 9:16 portrait aspect ratio embed style",
+      "acceptanceCriteria": [
+        "TutorialsSection renders exactly two video embeds, not three",
+        "First embed uses URL https://youtube.com/shorts/JqKmxZaWp-c?si=7E8QCHCfhrr6MbST",
+        "Second embed uses URL https://youtube.com/shorts/gdBxIyO-cIg?si=JrNJOLP8-MV1Ov8w",
+        "No old/previous video URLs remain in the component",
+        "Videos are displayed in 9:16 portrait aspect ratio consistent with the existing embed style",
+        "The two-video layout is visually balanced and consistent with the site's design system"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/TutorialsSection.tsx",
+          "operation": "modify",
+          "description": "Replace all three existing YouTube Shorts video URLs with exactly two new URLs: https://youtube.com/shorts/JqKmxZaWp-c?si=7E8QCHCfhrr6MbST and https://youtube.com/shorts/gdBxIyO-cIg?si=JrNJOLP8-MV1Ov8w. Remove the third video card from the component entirely. Preserve the existing 9:16 portrait aspect ratio embed styling and maintain the two-column or centered layout for the remaining two videos. Ensure the channel CTA link remains unchanged."
+        }
+      ]
+    }
+  ]
+}

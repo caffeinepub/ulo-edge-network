@@ -1,0 +1,25 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-update-the-tutorialssection-component-to-display-exactly-two-embedded-youtube-shorts-videos-down-from-three-replacing-all-current-videos-with-the-following-urls-https-youtube-com-shorts-jqkmxzawp-c-si-7e8qchcfhrr6mbst-and-https-youtube-com-shorts-gdbxiyo-cig-si-jrnjolp8-mv1ov8w-remove-the-third-video-card-entirely-maintain-the-existing-9-16-portrait-aspect-ratio-embed-style-and-layout",
+      "featureTitle": "Update the TutorialsSection component to display exactly two embedded YouTube Shorts videos (down from three), replacing all current videos with the following URLs: https://youtube.com/shorts/JqKmxZaWp-c?si=7E8QCHCfhrr6MbST and https://youtube.com/shorts/gdBxIyO-cIg?si=JrNJOLP8-MV1Ov8w. Remove the third video card entirely. Maintain the existing 9:16 portrait aspect ratio embed style and layout.",
+      "files": [
+        "frontend/src/components/TutorialsSection.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

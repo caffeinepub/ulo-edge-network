@@ -1,0 +1,37 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-03-01T14:12:23.576Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 1,
+    "implemented": 1,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Update the TutorialsSection component to display exactly two embedded YouTube Shorts videos (down from three), replacing all current videos with the following URLs: https://youtube.com/shorts/JqKmxZaWp-c?si=7E8QCHCfhrr6MbST and https://youtube.com/shorts/gdBxIyO-cIg?si=JrNJOLP8-MV1Ov8w. Remove the third video card entirely. Maintain the existing 9:16 portrait aspect ratio embed style and layout.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/TutorialsSection.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/TutorialsSection.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/components/TutorialsSection.tsx",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

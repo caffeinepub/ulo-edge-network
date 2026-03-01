@@ -1,0 +1,43 @@
+{
+  "kind": "build_request",
+  "title": "Reduce to two tutorial videos and replace with new YouTube Shorts",
+  "projectName": "ULO Mobile Edge Network",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Update the TutorialsSection component to display exactly two embedded YouTube Shorts videos (down from three), replacing all current videos with the following URLs: https://youtube.com/shorts/JqKmxZaWp-c?si=7E8QCHCfhrr6MbST and https://youtube.com/shorts/gdBxIyO-cIg?si=JrNJOLP8-MV1Ov8w. Remove the third video card entirely. Maintain the existing 9:16 portrait aspect ratio embed style and layout.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Reduce the videos onsite by one and replace the remaining videos with : https://youtube.com/shorts/JqKmxZaWp-c?si=7E8QCHCfhrr6MbST https://youtube.com/shorts/gdBxIyO-cIg?si=JrNJOLP8-MV1Ov8w"
+        ]
+      },
+      "acceptanceCriteria": [
+        "TutorialsSection renders exactly two video embeds, not three",
+        "First embed uses URL https://youtube.com/shorts/JqKmxZaWp-c?si=7E8QCHCfhrr6MbST",
+        "Second embed uses URL https://youtube.com/shorts/gdBxIyO-cIg?si=JrNJOLP8-MV1Ov8w",
+        "No old/previous video URLs remain in the component",
+        "Videos are displayed in 9:16 portrait aspect ratio consistent with the existing embed style",
+        "The two-video layout is visually balanced and consistent with the site's design system"
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not add any new videos beyond the two specified URLs",
+    "Preserve the existing embed aspect ratio (9:16 portrait) and styling approach",
+    "Do not modify any backend files"
+  ],
+  "nonGoals": [
+    "Adding new tutorial content or section copy beyond what already exists",
+    "Changing the channel CTA link or any other part of the TutorialsSection",
+    "Modifying any other page sections"
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
