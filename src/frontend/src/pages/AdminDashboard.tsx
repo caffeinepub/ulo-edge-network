@@ -1,8 +1,7 @@
-import ProtectedRoute from '../components/ProtectedRoute';
-import CreateLeaseForm from '../components/CreateLeaseForm';
-import AdminLeaseListTable from '../components/AdminLeaseListTable';
-import { Toaster } from '@/components/ui/sonner';
-import { Shield } from 'lucide-react';
+import { Toaster } from "@/components/ui/sonner";
+import { Shield } from "lucide-react";
+import AdminLeaseListTable from "../components/AdminLeaseListTable";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 function AdminDashboardContent() {
   return (
@@ -13,12 +12,15 @@ function AdminDashboardContent() {
           <div className="flex items-center gap-3">
             <Shield className="h-8 w-8 text-primary" />
             <div>
-              <h1 className="text-3xl sm:text-4xl font-bold">Admin Dashboard</h1>
-              <p className="text-muted-foreground mt-1">Manage your lease listings and availability status</p>
+              <h1 className="text-3xl sm:text-4xl font-bold">
+                Admin Dashboard
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                Manage your lease listings and availability status
+              </p>
             </div>
           </div>
 
-          <CreateLeaseForm />
           <AdminLeaseListTable />
         </div>
       </div>

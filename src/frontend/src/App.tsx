@@ -1,7 +1,12 @@
-import { createRouter, RouterProvider, createRoute, createRootRoute } from '@tanstack/react-router';
-import HomePage from './pages/HomePage';
-import AdminDashboard from './pages/AdminDashboard';
-import Layout from './components/Layout';
+import {
+  RouterProvider,
+  createRootRoute,
+  createRoute,
+  createRouter,
+} from "@tanstack/react-router";
+import Layout from "./components/Layout";
+import AdminDashboard from "./pages/AdminDashboard";
+import HomePage from "./pages/HomePage";
 
 const rootRoute = createRootRoute({
   component: Layout,
@@ -9,13 +14,13 @@ const rootRoute = createRootRoute({
 
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/',
+  path: "/",
   component: HomePage,
 });
 
 const adminRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/admin',
+  path: "/admin",
   component: AdminDashboard,
 });
 

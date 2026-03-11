@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { useGetAllLeaseListings } from '../hooks/useQueries';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Copy, Check, AlertCircle } from 'lucide-react';
-import { toast } from 'sonner';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AlertCircle, Check, Copy, RefreshCw } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { useGetAllLeaseListings } from "../hooks/useQueries";
 
 function formatPartialCode(fullCode: string): string {
-  const parts = fullCode.split('-');
-  if (parts.length < 2) return fullCode.substring(0, 4) + '...';
+  const parts = fullCode.split("-");
+  if (parts.length < 2) return `${fullCode.substring(0, 4)}...`;
   const firstFour = fullCode.substring(0, 4);
   const lastPart = parts[parts.length - 1];
   const lastFour = lastPart.substring(0, 4);
@@ -17,26 +17,29 @@ function formatPartialCode(fullCode: string): string {
 }
 
 export default function LeaseListings() {
-  // NOTE: This component is for PUBLIC display only.
-  // The 'nickname' field from LeaseListing must NEVER be displayed here.
-  // Only show: partial lease code, split ratio, availability status, and copy button.
-  const { data: listings, isLoading, error } = useGetAllLeaseListings();
+  const {
+    data: listings,
+    isLoading,
+    error,
+    isFetching,
+    dataUpdatedAt,
+  } = useGetAllLeaseListings();
   const [copiedId, setCopiedId] = useState<bigint | null>(null);
 
   const handleCopy = async (leaseCode: string, listingId: bigint) => {
     try {
       await navigator.clipboard.writeText(leaseCode);
       setCopiedId(listingId);
-      toast.success('Lease code copied to clipboard!');
+      toast.success("Lease code copied to clipboard!");
       setTimeout(() => setCopiedId(null), 2000);
-    } catch (err) {
-      toast.error('Failed to copy code. Please try again.');
+    } catch (_err) {
+      toast.error("Failed to copy code. Please try again.");
     }
   };
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {[1, 2, 3].map((i) => (
           <Card key={i}>
             <CardHeader>
@@ -58,7 +61,7 @@ export default function LeaseListings() {
       <Card className="border-destructive">
         <CardContent className="pt-6">
           <div className="flex items-center gap-2 text-destructive">
-            <AlertCircle className="h-5 w-5" />
+            <AlertCircle className="h-5 w-5 flex-shrink-0" />
             <p>Failed to load lease listings. Please try again later.</p>
           </div>
         </CardContent>
@@ -78,64 +81,94 @@ export default function LeaseListings() {
     );
   }
 
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {listings.map((listing) => {
-        const isCopied = copiedId === listing.listingId;
-        const isAvailable = listing.availability;
+  const lastUpdated = dataUpdatedAt
+    ? new Date(dataUpdatedAt).toLocaleTimeString()
+    : null;
 
-        return (
-          <Card key={listing.listingId.toString()} className={!isAvailable ? 'opacity-75' : ''}>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-lg">Lease #{listing.listingId.toString()}</CardTitle>
-                <Badge 
-                  variant={isAvailable ? 'default' : 'secondary'}
-                  className={isAvailable ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700'}
-                >
-                  {isAvailable ? 'Available' : 'Unavailable'}
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">Lease Code</p>
-                <p className="font-mono text-sm bg-muted px-3 py-2 rounded">
-                  {formatPartialCode(listing.leaseCode)}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground mb-1">Split Ratio</p>
-                <p className="font-semibold text-lg">{listing.splitRatio}</p>
-              </div>
-              {!isAvailable && (
-                <p className="text-sm text-destructive flex items-center gap-2">
-                  <AlertCircle className="h-4 w-4" />
-                  This code is already in use. Please try another.
-                </p>
-              )}
-              <Button
-                onClick={() => handleCopy(listing.leaseCode, listing.listingId)}
-                disabled={!isAvailable}
-                className="w-full gap-2"
-                variant={isAvailable ? 'default' : 'secondary'}
-              >
-                {isCopied ? (
-                  <>
-                    <Check className="h-4 w-4" />
-                    Copied!
-                  </>
-                ) : (
-                  <>
-                    <Copy className="h-4 w-4" />
-                    Copy Code
-                  </>
+  return (
+    <div>
+      <div className="flex items-center justify-end gap-2 mb-4 text-xs text-muted-foreground">
+        <RefreshCw className={`h-3 w-3 ${isFetching ? "animate-spin" : ""}`} />
+        <span>
+          {isFetching
+            ? "Refreshing…"
+            : lastUpdated
+              ? `Updated ${lastUpdated}`
+              : "Live"}
+        </span>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {listings.map((listing) => {
+          const isCopied = copiedId === listing.listingId;
+          const isAvailable = listing.availability;
+
+          return (
+            <Card
+              key={listing.listingId.toString()}
+              className={!isAvailable ? "opacity-75" : ""}
+            >
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between gap-2">
+                  <CardTitle className="text-base sm:text-lg">
+                    Lease #{listing.listingId.toString()}
+                  </CardTitle>
+                  <Badge
+                    variant={isAvailable ? "default" : "secondary"}
+                    className={`text-xs flex-shrink-0 ${isAvailable ? "bg-green-600 hover:bg-green-700 text-white" : "bg-red-600 hover:bg-red-700 text-white"}`}
+                  >
+                    {isAvailable ? "Available" : "Unavailable"}
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-1">
+                    Lease Code
+                  </p>
+                  <p className="font-mono text-sm bg-muted px-3 py-2 rounded break-all">
+                    {formatPartialCode(listing.leaseCode)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs sm:text-sm text-muted-foreground mb-1">
+                    Split Ratio
+                  </p>
+                  <p className="font-semibold text-base sm:text-lg">
+                    {listing.splitRatio}
+                  </p>
+                </div>
+                {!isAvailable && (
+                  <p className="text-xs sm:text-sm text-destructive flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                    This code is already in use. Please try another.
+                  </p>
                 )}
-              </Button>
-            </CardContent>
-          </Card>
-        );
-      })}
+                <Button
+                  onClick={() =>
+                    handleCopy(listing.leaseCode, listing.listingId)
+                  }
+                  disabled={!isAvailable}
+                  className="w-full gap-2 min-h-[44px]"
+                  variant={isAvailable ? "default" : "secondary"}
+                >
+                  {isCopied ? (
+                    <>
+                      <Check className="h-4 w-4" />
+                      Copied!
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-4 w-4" />
+                      Copy Code
+                    </>
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
     </div>
   );
 }

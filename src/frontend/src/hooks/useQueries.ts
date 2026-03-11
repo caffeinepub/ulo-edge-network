@@ -1,22 +1,21 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useActor } from './useActor';
-import { useInternetIdentity } from './useInternetIdentity';
-import type { LeaseListing, ListingID, UserProfile } from '../backend';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { LeaseListing, ListingID, UserRole } from "../backend";
+import { useActor } from "./useActor";
+import { useInternetIdentity } from "./useInternetIdentity";
 
 export function useGetAllLeaseListings() {
   const { actor, isFetching } = useActor();
 
   return useQuery<LeaseListing[]>({
-    queryKey: ['leaseListings'],
+    queryKey: ["leaseListings"],
     queryFn: async () => {
-      if (!actor) {
-        throw new Error('Actor not available');
-      }
+      if (!actor) return [];
       const listings = await actor.getAllLeaseListings();
       return listings;
     },
     enabled: !!actor && !isFetching,
-    staleTime: 30000, // Cache for 30 seconds
+    staleTime: 30000,
+    refetchInterval: 60000,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
   });
@@ -27,10 +26,10 @@ export function useIsCallerAdmin() {
   const { identity, isInitializing } = useInternetIdentity();
 
   return useQuery<boolean>({
-    queryKey: ['isCallerAdmin', identity?.getPrincipal().toString()],
+    queryKey: ["isCallerAdmin", identity?.getPrincipal().toString()],
     queryFn: async () => {
       if (!actor) {
-        throw new Error('Actor not available');
+        throw new Error("Actor not available");
       }
       if (!identity) {
         return false;
@@ -39,7 +38,7 @@ export function useIsCallerAdmin() {
         const result = await actor.isCallerAdmin();
         return result;
       } catch (error) {
-        console.error('Error checking admin status:', error);
+        console.error("Error checking admin status:", error);
         throw error;
       }
     },
@@ -50,97 +49,36 @@ export function useIsCallerAdmin() {
   });
 }
 
-export function useGetCallerUserProfile() {
+export function useGetCallerUserRole() {
   const { actor, isFetching } = useActor();
   const { identity, isInitializing } = useInternetIdentity();
 
-  return useQuery<UserProfile | null>({
-    queryKey: ['currentUserProfile', identity?.getPrincipal().toString()],
+  return useQuery<UserRole | null>({
+    queryKey: ["callerUserRole", identity?.getPrincipal().toString()],
     queryFn: async () => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.getCallerUserProfile();
+      if (!actor) throw new Error("Actor not available");
+      return actor.getCallerUserRole();
     },
     enabled: !!actor && !!identity && !isFetching && !isInitializing,
     retry: false,
   });
 }
 
-export function useSaveCallerUserProfile() {
-  const { actor } = useActor();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (profile: UserProfile) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.saveCallerUserProfile(profile);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['currentUserProfile'] });
-    },
-  });
-}
-
-export function useCreateLeaseListing() {
+export function useAssignCallerUserRole() {
   const { actor } = useActor();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({
-      nickname,
-      leaseCode,
-      splitRatio,
-    }: {
-      nickname: string;
-      leaseCode: string;
-      splitRatio: string;
-    }) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.createLeaseListing(nickname, leaseCode, splitRatio);
+      user,
+      role,
+    }: { user: import("@dfinity/principal").Principal; role: UserRole }) => {
+      if (!actor) throw new Error("Actor not available");
+      return actor.assignCallerUserRole(user, role);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['leaseListings'] });
-    },
-  });
-}
-
-export function useUpdateLeaseListing() {
-  const { actor } = useActor();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async ({
-      listingId,
-      nickname,
-      leaseCode,
-      splitRatio,
-      availability,
-    }: {
-      listingId: ListingID;
-      nickname: string;
-      leaseCode: string;
-      splitRatio: string;
-      availability: boolean;
-    }) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.updateLeaseListing(listingId, nickname, leaseCode, splitRatio, availability);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['leaseListings'] });
-    },
-  });
-}
-
-export function useDeleteLeaseListing() {
-  const { actor } = useActor();
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (listingId: ListingID) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.deleteLeaseListing(listingId);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['leaseListings'] });
+      queryClient.invalidateQueries({ queryKey: ["callerUserRole"] });
+      queryClient.invalidateQueries({ queryKey: ["isCallerAdmin"] });
     },
   });
 }

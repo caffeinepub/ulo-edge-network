@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from '@tanstack/react-router';
-import { useInternetIdentity } from '../hooks/useInternetIdentity';
-import { useIsCallerAdmin } from '../hooks/useQueries';
-import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
+import { useNavigate } from "@tanstack/react-router";
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useInternetIdentity } from "../hooks/useInternetIdentity";
+import { useIsCallerAdmin } from "../hooks/useQueries";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -12,7 +12,12 @@ interface ProtectedRouteProps {
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const navigate = useNavigate();
   const { identity, isInitializing } = useInternetIdentity();
-  const { data: isAdmin, isLoading: isCheckingAdmin, isFetched, error } = useIsCallerAdmin();
+  const {
+    data: isAdmin,
+    isLoading: isCheckingAdmin,
+    isFetched,
+    error,
+  } = useIsCallerAdmin();
   const [hasShownError, setHasShownError] = useState(false);
 
   useEffect(() => {
@@ -24,10 +29,10 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     // Check if user is not logged in
     if (!identity) {
       if (!hasShownError) {
-        toast.error('Please log in to access the admin dashboard');
+        toast.error("Please log in to access the admin dashboard");
         setHasShownError(true);
       }
-      navigate({ to: '/' });
+      navigate({ to: "/" });
       return;
     }
 
@@ -38,25 +43,34 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
 
     // Handle errors from admin check
     if (error) {
-      console.error('Admin check error:', error);
+      console.error("Admin check error:", error);
       if (!hasShownError) {
-        toast.error('Error verifying admin access');
+        toast.error("Error verifying admin access");
         setHasShownError(true);
       }
-      navigate({ to: '/' });
+      navigate({ to: "/" });
       return;
     }
 
     // Check admin status only after query has completed
     if (isAdmin === false) {
       if (!hasShownError) {
-        toast.error('Admin access is restricted');
+        toast.error("Admin access is restricted");
         setHasShownError(true);
       }
-      navigate({ to: '/' });
+      navigate({ to: "/" });
       return;
     }
-  }, [identity, isAdmin, isCheckingAdmin, isInitializing, isFetched, error, navigate, hasShownError]);
+  }, [
+    identity,
+    isAdmin,
+    isCheckingAdmin,
+    isInitializing,
+    isFetched,
+    error,
+    navigate,
+    hasShownError,
+  ]);
 
   // Show loading state while initializing or checking
   if (isInitializing || !isFetched || isCheckingAdmin) {
