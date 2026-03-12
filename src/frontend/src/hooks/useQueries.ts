@@ -28,15 +28,10 @@ export function useIsCallerAdmin() {
   return useQuery<boolean>({
     queryKey: ["isCallerAdmin", identity?.getPrincipal().toString()],
     queryFn: async () => {
-      if (!actor) {
-        throw new Error("Actor not available");
-      }
-      if (!identity) {
-        return false;
-      }
+      if (!actor) throw new Error("Actor not available");
+      if (!identity) return false;
       try {
-        const result = await actor.isCallerAdmin();
-        return result;
+        return await actor.isCallerAdmin();
       } catch (error) {
         console.error("Error checking admin status:", error);
         throw error;
@@ -79,6 +74,73 @@ export function useAssignCallerUserRole() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["callerUserRole"] });
       queryClient.invalidateQueries({ queryKey: ["isCallerAdmin"] });
+    },
+  });
+}
+
+export function useAddLeaseListing() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: {
+      nickname: string;
+      leaseCode: string;
+      splitRatio: string;
+      availability: boolean;
+    }) => {
+      if (!actor) throw new Error("Actor not available");
+      return actor.addLeaseListing(
+        data.nickname,
+        data.leaseCode,
+        data.splitRatio,
+        data.availability,
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["leaseListings"] });
+    },
+  });
+}
+
+export function useUpdateLeaseListing() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: {
+      listingId: ListingID;
+      nickname: string;
+      leaseCode: string;
+      splitRatio: string;
+      availability: boolean;
+    }) => {
+      if (!actor) throw new Error("Actor not available");
+      return actor.updateLeaseListing(
+        data.listingId,
+        data.nickname,
+        data.leaseCode,
+        data.splitRatio,
+        data.availability,
+      );
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["leaseListings"] });
+    },
+  });
+}
+
+export function useDeleteLeaseListing() {
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (listingId: ListingID) => {
+      if (!actor) throw new Error("Actor not available");
+      return actor.deleteLeaseListing(listingId);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["leaseListings"] });
     },
   });
 }

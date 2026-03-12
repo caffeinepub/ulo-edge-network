@@ -65,6 +65,9 @@ export const idlService = IDL.Service({
   'getAllLeaseListings' : IDL.Func([], [IDL.Vec(LeaseListing)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'addLeaseListing' : IDL.Func([IDL.Text, IDL.Text, IDL.Text, IDL.Bool], [LeaseListing], []),
+  'updateLeaseListing' : IDL.Func([IDL.Nat, IDL.Text, IDL.Text, IDL.Text, IDL.Bool], [IDL.Opt(LeaseListing)], []),
+  'deleteLeaseListing' : IDL.Func([IDL.Nat], [IDL.Bool], []),
 });
 
 export const idlInitArgs = [];
@@ -127,6 +130,9 @@ export const idlFactory = ({ IDL }) => {
     'getAllLeaseListings' : IDL.Func([], [IDL.Vec(LeaseListing)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'addLeaseListing' : IDL.Func([IDL.Text, IDL.Text, IDL.Text, IDL.Bool], [LeaseListing], []),
+    'updateLeaseListing' : IDL.Func([IDL.Nat, IDL.Text, IDL.Text, IDL.Text, IDL.Bool], [IDL.Opt(LeaseListing)], []),
+    'deleteLeaseListing' : IDL.Func([IDL.Nat], [IDL.Bool], []),
   });
 };
 

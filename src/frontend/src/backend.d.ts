@@ -25,4 +25,7 @@ export interface backendInterface {
     getAllLeaseListings(): Promise<Array<LeaseListing>>;
     getCallerUserRole(): Promise<UserRole>;
     isCallerAdmin(): Promise<boolean>;
+    addLeaseListing(nickname: string, leaseCode: string, splitRatio: string, availability: boolean): Promise<LeaseListing>;
+    updateLeaseListing(listingId: ListingID, nickname: string, leaseCode: string, splitRatio: string, availability: boolean): Promise<LeaseListing | null>;
+    deleteLeaseListing(listingId: ListingID): Promise<boolean>;
 }

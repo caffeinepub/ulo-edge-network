@@ -1,6 +1,5 @@
 import MixinStorage "blob-storage/Mixin";
 import Map "mo:core/Map";
-import Array "mo:core/Array";
 import Order "mo:core/Order";
 import Nat "mo:core/Nat";
 import Principal "mo:core/Principal";
@@ -28,24 +27,84 @@ actor {
   var nextListingId : ListingID = 0;
   let userProfiles = Map.empty<Principal, UserProfile>();
 
-  module LeaseListing {
-    public func compare(listing1 : LeaseListing, listing2 : LeaseListing) : Order.Order {
-      compareByListingId(listing1, listing2);
-    };
-
-    public func compareByListingId(listing1 : LeaseListing, listing2 : LeaseListing) : Order.Order {
-      Nat.compare(listing1.listingId, listing2.listingId);
-    };
-  };
-
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
   include MixinStorage();
 
-  // Lease Listing Management
-  public query ({ caller }) func getAllLeaseListings() : async [LeaseListing] {
-    leaseListings.values().toArray().sort();
+  // Safe admin check that doesn't trap for unregistered callers
+  func callerIsAdmin(caller : Principal) : Bool {
+    switch (accessControlState.userRoles.get(caller)) {
+      case (?(#admin)) { true };
+      case (_) { false };
+    };
   };
 
-  // Add other necessary functions as needed
+  // Public query — no auth required
+  public query func getAllLeaseListings() : async [LeaseListing] {
+    leaseListings.values().toArray();
+  };
+
+  // Admin-only: add a new lease listing
+  public shared ({ caller }) func addLeaseListing(
+    nickname : Text,
+    leaseCode : Text,
+    splitRatio : Text,
+    availability : Bool
+  ) : async LeaseListing {
+    if (not callerIsAdmin(caller)) {
+      Runtime.trap("Unauthorized");
+    };
+    let id = nextListingId;
+    nextListingId += 1;
+    let listing : LeaseListing = {
+      listingId = id;
+      nickname = nickname;
+      leaseCode = leaseCode;
+      splitRatio = splitRatio;
+      availability = availability;
+    };
+    leaseListings.add(id, listing);
+    listing;
+  };
+
+  // Admin-only: update an existing lease listing
+  public shared ({ caller }) func updateLeaseListing(
+    listingId : ListingID,
+    nickname : Text,
+    leaseCode : Text,
+    splitRatio : Text,
+    availability : Bool
+  ) : async ?LeaseListing {
+    if (not callerIsAdmin(caller)) {
+      Runtime.trap("Unauthorized");
+    };
+    switch (leaseListings.get(listingId)) {
+      case null { null };
+      case (?_existing) {
+        let updated : LeaseListing = {
+          listingId = listingId;
+          nickname = nickname;
+          leaseCode = leaseCode;
+          splitRatio = splitRatio;
+          availability = availability;
+        };
+        leaseListings.add(listingId, updated);
+        ?updated;
+      };
+    };
+  };
+
+  // Admin-only: delete a lease listing
+  public shared ({ caller }) func deleteLeaseListing(listingId : ListingID) : async Bool {
+    if (not callerIsAdmin(caller)) {
+      Runtime.trap("Unauthorized");
+    };
+    switch (leaseListings.get(listingId)) {
+      case null { false };
+      case (?_) {
+        leaseListings.remove(listingId);
+        true;
+      };
+    };
+  };
 };

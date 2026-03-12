@@ -53,6 +53,9 @@ export interface _SERVICE {
   'getAllLeaseListings' : ActorMethod<[], Array<LeaseListing>>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  'addLeaseListing' : ActorMethod<[string, string, string, boolean], LeaseListing>,
+  'updateLeaseListing' : ActorMethod<[bigint, string, string, string, boolean], [] | [LeaseListing]>,
+  'deleteLeaseListing' : ActorMethod<[bigint], boolean>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

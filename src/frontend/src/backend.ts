@@ -125,6 +125,9 @@ export interface backendInterface {
     getAllLeaseListings(): Promise<Array<LeaseListing>>;
     getCallerUserRole(): Promise<UserRole>;
     isCallerAdmin(): Promise<boolean>;
+    addLeaseListing(nickname: string, leaseCode: string, splitRatio: string, availability: boolean): Promise<LeaseListing>;
+    updateLeaseListing(listingId: ListingID, nickname: string, leaseCode: string, splitRatio: string, availability: boolean): Promise<LeaseListing | null>;
+    deleteLeaseListing(listingId: ListingID): Promise<boolean>;
 }
 import type { UserRole as _UserRole, _CaffeineStorageRefillInformation as __CaffeineStorageRefillInformation, _CaffeineStorageRefillResult as __CaffeineStorageRefillResult } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
@@ -280,6 +283,48 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.isCallerAdmin();
+            return result;
+        }
+    }
+    async addLeaseListing(arg0: string, arg1: string, arg2: string, arg3: boolean): Promise<LeaseListing> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.addLeaseListing(arg0, arg1, arg2, arg3);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.addLeaseListing(arg0, arg1, arg2, arg3);
+            return result;
+        }
+    }
+    async updateLeaseListing(arg0: ListingID, arg1: string, arg2: string, arg3: string, arg4: boolean): Promise<LeaseListing | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateLeaseListing(arg0, arg1, arg2, arg3, arg4);
+                return result.length === 0 ? null : result[0];
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateLeaseListing(arg0, arg1, arg2, arg3, arg4);
+            return result.length === 0 ? null : result[0];
+        }
+    }
+    async deleteLeaseListing(arg0: ListingID): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteLeaseListing(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteLeaseListing(arg0);
             return result;
         }
     }
